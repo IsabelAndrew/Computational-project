@@ -71,7 +71,6 @@ function saveToGif(x,phi,vid,axs,frames,v,gamma,T)
         plt1.YData = phi(:,round(i*end/frames)); % Update plot data for the current frame
         plt2.YData = 4*atan(exp((gamma*(x-v*round(i)*T/frames*ones(size(x)))))); % Update plot data for the current frame
         drawnow; % Update the figure window
-        %pause(0.1); % Pause to control the frame rate
     end
 end
 
