@@ -1,0 +1,56 @@
+% Number of gridpoints and domain size
+N = 200; L = 12;
+% position of kink
+a=0;
+
+
+% Spatial grid and grid spacing
+x = linspace(-L,L,N);
+dx = x(2)-x(1);
+
+v=0;
+gamma = 1/sqrt((1-v^2));
+
+% Initial condition
+p0 = 4*atan(exp(gamma*(x-a)));
+h0 = 4*atan(exp(gamma*(-x-a)));
+
+% Initialize the spatial parameters for simulation
+T = 15; dt = 0.01; time = 0:dt:T;
+
+% Preallocate the solution array
+phi = zeros(N, length(time));
+phi2 = zeros(N, length(time));
+p1 = 4*atan(exp(gamma*(x-a-v*dt)));
+h1 = 4*atan(exp(gamma*(-x-a-v*dt)));
+
+phi(:, 1) = p0;
+phi(:, 2) = p1; % Set initial condition
+phi2(:, 1) = h0;
+phi2(:, 2) = h1;
+
+
+% Time-stepping loop for the simulation
+for n = 2:length(time)-1
+    % Update the solution using a numerical scheme 
+   phi(1,n+1) = phi(1,n) + (dt/dx)*(phi(2,n) - phi(1,n));
+   phi(end,n+1) = phi(end,n) - (dt/dx)*(phi(end,n) - phi(end-1,n));
+   k = 2:N-1;
+   phi(k,n+1) = 2*phi(k,n)-phi(k,n-1)+dt^2*((phi(k+1,n)-2*phi(k,n)+phi(k-1,n))/dx^2-sin(phi(k,n)));
+   phi2(1,n+1) = phi2(1,n) + (dt/dx)*(phi2(2,n) - phi2(1,n));
+   phi2(end,n+1) = phi2(end,n) - (dt/dx)*(phi2(end,n) - phi2(end-1,n));
+   phi2(k,n+1) = 2*phi2(k,n)-phi2(k,n-1)+dt^2*((phi2(k+1,n)-2*phi2(k,n)+phi2(k-1,n))/dx^2-sin(phi2(k,n)));
+end
+
+
+close all;
+
+
+figure;
+plot(x,phi(:,end),LineWidth=2)
+hold on;
+plot(x,phi2(:,end),LineWidth=2)
+axis([-9.9,9.9,-1,8])
+legend('$4\arctan(e^{\gamma x})$','$4\arctan(e^{-\gamma x})$','Interpreter','latex','Location','best','FontSize',20)
+xlabel('$x$','Interpreter','latex','FontSize',24)
+ylabel('$\phi$','Interpreter','latex','FontSize',24)
