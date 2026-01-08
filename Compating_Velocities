@@ -1,0 +1,15 @@
+N = 200; L = 12;
+x = linspace(-L,L,N);
+
+figure;
+plot(x,4*atan(exp(x)),LineWidth=2)
+hold on;
+axis([-6,6,-1,7])
+plot(x,4*atan(exp(x)),'--')
+plot(x,4*atan(exp((1/sqrt(1-(0.2)^2)*x))),'--')
+plot(x,4*atan(exp((1/sqrt(1-(0.4)^2)*x))),'--')
+plot(x,4*atan(exp((1/sqrt(1-(0.6)^2)*x))),'--')
+plot(x,4*atan(exp((1/sqrt(1-(0.8)^2)*x))),'--')
+legend('Static','$v=0.2$','$v=0.4$','$v=0.6$','$v=0.8$','Interpreter','latex','Location','best','FontSize',20)
+xlabel('$x$','Interpreter','latex','FontSize',24)
+ylabel('$\phi$','Interpreter','latex','FontSize',24)
